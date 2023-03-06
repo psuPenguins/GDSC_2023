@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "507626516421",
+    "firebase_url": "https://gdsc-2023-default-rtdb.firebaseio.com",
+    "project_id": "gdsc-2023",
+    "storage_bucket": "gdsc-2023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507626516421:android:2bb0b056da03441b9925ac",
+        "android_client_info": {
+          "package_name": "map.gdsc_2023"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507626516421-ngvrjt6f03t4rklbfikm1j2mnmgblfub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrVan0uR32QrAosApia-cps1uFBHdQzH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507626516421-ngvrjt6f03t4rklbfikm1j2mnmgblfub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
