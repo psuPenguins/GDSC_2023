@@ -13,12 +13,13 @@
     <ImageView
         android:id="@+id/ivReportPic"
         android:name="holeinground_picture"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_below="@+id/backButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
         android:color="#D9D9D9"
         android:radius="30dp"
+        android:scaleType="centerInside"
         android:x="35dp"
         android:y="97dp"
         app:shapeType="rectangle"
@@ -41,43 +42,13 @@
 
     <Button
         android:id="@+id/backButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/backarrow"
         android:contentDescription="@string/bc_back" />
 
-    <LinearLayout
-        android:id="@+id/button"
-        android:layout_width="105dp"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/rounded_layout"
-        android:clickable="true"
-        android:orientation="horizontal"
-        android:padding="-10dp">
-
-        <ImageView
-            android:id="@+id/ivTypeObstacle"
-            android:layout_width="29dp"
-            android:layout_height="30dp"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="3dp"
-            android:background="@drawable/type_obstacle"
-            android:scaleX=".8"
-            android:scaleY=".8" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="5dp"
-            android:text="Obstacles"
-            android:textColor="@color/foreground" />
-    </LinearLayout>
+    <include layout="@layout/type_obstacle" />
 
 </RelativeLayout>

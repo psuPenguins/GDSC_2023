@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/button"
+    android:layout_width="105dp"
+    android:layout_height="35dp"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/rounded_layout"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="-10dp"
+    tools:showIn="@layout/activity_existing_report">
+
+    <ImageView
+        android:id="@+id/ivTypeObstacle"
+        android:layout_width="29dp"
+        android:layout_height="30dp"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="3dp"
+        android:scaleX=".8"
+        android:scaleY=".8"
+        android:alpha="0.8"
+        app:srcCompat="@drawable/obstacle_pic" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_margin="5dp"
+        android:text="Obstacles"
+        android:textColor="@color/foreground" />
+</LinearLayout>
