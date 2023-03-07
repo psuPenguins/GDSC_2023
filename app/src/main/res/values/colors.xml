@@ -2,9 +2,12 @@
 <resources>
     <color name="foreground">#AFAFAF</color>
     <color name="main">#FFFFFF</color>
-    <color name="background">#2C2C2C</color>
+    <color name="background">#212121</color>
     <color name="button">#474747</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#000000</color>
+
+    // Severity colors
+    <color name="red">#ED0000</color>
+    <color name="yellow">#FFBF00</color>
+    <color name="green">#00D615</color>
 </resources>
