@@ -26,7 +26,7 @@
         android:layout_height="250dp"
         android:layout_below="@id/backButton"
         android:layout_centerInParent="true"
-        android:background="@drawable/uploadImageButton_foreground"
+        android:background="@drawable/upload_image_button_foreground"
         android:contentDescription="10dp" />
 
     <EditText

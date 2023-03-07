@@ -22,7 +22,6 @@
         android:scaleType="centerInside"
         android:x="35dp"
         android:y="97dp"
-        app:shapeType="rectangle"
         app:srcCompat="@drawable/report_rock" />
 
     <TextView

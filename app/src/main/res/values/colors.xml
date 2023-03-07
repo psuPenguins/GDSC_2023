@@ -5,6 +5,8 @@
     <color name="background">#212121</color>
     <color name="button">#474747</color>
     <color name="black">#000000</color>
+    <color name="backButton_foreground">#000000</color>
+
 
     // Severity colors
     <color name="red">#ED0000</color>
