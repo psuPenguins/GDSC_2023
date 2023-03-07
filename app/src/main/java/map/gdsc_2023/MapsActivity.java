@@ -97,6 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(500)
                 .setMaxUpdateDelayMillis(1000)
+                .setMinUpdateDistanceMeters(1)
                 .build();
         // permission check thing
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
