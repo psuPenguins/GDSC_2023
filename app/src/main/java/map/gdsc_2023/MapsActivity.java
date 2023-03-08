@@ -1,5 +1,6 @@
 package map.gdsc_2023;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -25,10 +26,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import map.gdsc_2023.databinding.ActivityMapsBinding;
 
@@ -41,7 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +94,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(pennState).title("Marker in Penn State"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pennState,17));
         */
-
+        db.collection("Hazards")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // success stuff
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                GeoPoint geo = (GeoPoint) document.get("location");
+                                LatLng pin = new LatLng(geo.getLatitude(), geo.getLongitude());
+                                googleMap.addMarker(new MarkerOptions()
+                                        .position(pin)
+                                        .title("test marker"));
+                            }
+                        } else {
+                            // death
+                        }
+                    }
+                });
         mLocationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(500)
