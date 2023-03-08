@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">GDSC_2023</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+
+    // Button content descriptions
+    <string name="bc_back">back arrow</string>
+    <string name="bc_type_obstacle">obstacle</string>
+
+
+    // Report descriptions
+    <string name="hole_description">There is a huge hole where your feet can fit and make you trip.</string>
+    <string name="stairs_description">Slippery Dippery Doo, fell head down. split my skull in two.</string>
+    <string name="icy_road_description">Covered by frozen water, embraced in a chill, make sure you are steady, or gravity may have its fill.</string>
+    <string name="stone_description">Be careful of those cute-looking rocks on the road. You might meet some difficulties walking past it.</string>
+
 </resources>

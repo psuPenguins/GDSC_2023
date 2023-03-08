@@ -42,6 +42,9 @@ import java.util.Map;
 
 import map.gdsc_2023.databinding.ActivityMapsBinding;
 
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.Shape;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;

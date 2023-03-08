@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hsvSeverity"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:layout_above="@id/submitReportButton"
+    android:layout_centerInParent="true"
+    android:orientation="horizontal"
+    tools:showIn="@layout/activity_new_report"
+    android:layout_marginBottom="5dp">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/newMinorButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/background"
+        android:text="Minor"
+        android:textColor="@color/foreground"
+        app:cornerRadius="5dp"
+        app:strokeColor="@color/green"
+        app:strokeWidth="1dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/newModerateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/background"
+        android:text="Moderate"
+        android:textColor="@color/foreground"
+        app:cornerRadius="5sp"
+        app:strokeColor="@color/yellow"
+        app:strokeWidth="1dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/newSeriousButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/background"
+        android:text="Serious"
+        android:textColor="@color/foreground"
+        app:cornerRadius="5dp"
+        app:strokeColor="@color/red"
+        app:strokeWidth="1dp" />
+</LinearLayout>
