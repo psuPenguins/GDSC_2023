@@ -44,7 +44,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/backarrow"
+        android:background="@drawable/back_arrow_icon"
         android:contentDescription="@string/bc_back" />
 
     <include layout="@layout/type_obstacle" />

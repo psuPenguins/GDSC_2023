@@ -23,7 +23,7 @@
         android:scaleX=".8"
         android:scaleY=".8"
         android:alpha="0.8"
-        app:srcCompat="@drawable/obstacle_pic" />
+        app:srcCompat="@drawable/obstacle_icon" />
 
     <TextView
         android:id="@+id/textView2"

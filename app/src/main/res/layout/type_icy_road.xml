@@ -22,7 +22,7 @@
         android:layout_marginStart="3dp"
         android:scaleX="1.1"
         android:scaleY="1.1"
-        app:srcCompat="@drawable/icy_road_pic" />
+        app:srcCompat="@drawable/icy_road_icon" />
 
     <TextView
         android:id="@+id/textView2"

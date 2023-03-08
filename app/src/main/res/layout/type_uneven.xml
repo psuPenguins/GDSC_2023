@@ -22,7 +22,7 @@
         android:layout_marginStart="3dp"
         android:scaleX=".8"
         android:scaleY=".8"
-        app:srcCompat="@drawable/uneven_pic" />
+        app:srcCompat="@drawable/uneven_icon" />
 
     <TextView
         android:id="@+id/textView2"
