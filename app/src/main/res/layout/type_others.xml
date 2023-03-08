@@ -16,12 +16,12 @@
     <ImageView
         android:id="@+id/ivTypeObstacle"
         android:layout_width="29dp"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:layout_gravity="start|center_vertical"
         android:layout_marginStart="3dp"
         android:scaleX=".8"
         android:scaleY=".8"
-        app:srcCompat="@drawable/others_icon" />
+        android:src="@drawable/others_icon" />
 
     <TextView
         android:id="@+id/textView2"
