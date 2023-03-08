@@ -51,7 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +67,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // fused location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // marking map
+
     }
 
     @Override
@@ -89,30 +93,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         /*
         LatLng pennState = new LatLng(40.7965, -77.8628);
         mMap.addMarker(new MarkerOptions().position(pennState).title("Marker in Penn State"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pennState,17));
         */
-        db.collection("Hazards")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // success stuff
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                GeoPoint geo = (GeoPoint) document.get("location");
-                                LatLng pin = new LatLng(geo.getLatitude(), geo.getLongitude());
-                                googleMap.addMarker(new MarkerOptions()
-                                        .position(pin)
-                                        .title("test marker"));
-                            }
-                        } else {
-                            // death
-                        }
-                    }
-                });
+
         mLocationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(500)
@@ -128,6 +115,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback,
                 Looper.myLooper());
         mMap.setMyLocationEnabled(true);
+
+        // marking map
+        MapMarker marker = new MapMarker();
+        marker.loadHazard(mMap, this);
     }
 
     /**
