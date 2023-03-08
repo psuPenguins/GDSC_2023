@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="foreground">#AFAFAF</color>
-    <color name="main">#FFFFFF</color>
     <color name="background">#212121</color>
-    <color name="button">#474747</color>
+    <color name="grey">#474747</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="backButton_foreground">#000000</color>
 

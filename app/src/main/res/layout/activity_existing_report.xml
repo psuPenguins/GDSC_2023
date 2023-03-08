@@ -17,7 +17,6 @@
         android:layout_height="250dp"
         android:layout_below="@+id/backButton"
         android:layout_centerHorizontal="true"
-        android:color="#D9D9D9"
         android:radius="30dp"
         android:scaleType="centerInside"
         android:x="35dp"
