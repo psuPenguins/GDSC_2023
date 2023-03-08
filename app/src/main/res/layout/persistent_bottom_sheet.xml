@@ -10,65 +10,43 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     >
 
-    <RelativeLayout
-        android:background="#424040"
-        android:layout_width="match_parent"
-        android:layout_height="64dp">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/background"
+        android:orientation="horizontal"
+        >
 
-        <Button
-            android:id="@+id/filterButton"
-            layout="@layout/bt_filter"
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="5dp" />
-        <Button
-            android:id="@+id/addReportButton"
-            layout="@layout/bt_add_report"
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="95dp"
-            android:layout_marginTop="5dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:background="#858383"
-        android:layout_width="match_parent"
-        android:layout_height="500dp">
-
-        <HorizontalScrollView
-            android:id="@+id/hsvDangerType"
+        <include
+            layout="@layout/filter_button"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <include
+            layout="@layout/add_report_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@color/background">
+
+        <include
+            layout="@layout/hsv_types"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_attributes"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="0dp"
-            tools:layout_marginBottom="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <include layout="@layout/type_icy_road" />
-
-                <include layout="@layout/type_uneven" />
-
-                <include layout="@layout/type_obstacle" />
-
-                <include layout="@layout/type_puddle" />
-
-                <include layout="@layout/type_others" />
-            </LinearLayout>
-
-        </HorizontalScrollView>
+            android:layout_marginTop="10dp" />
 
         <include
             layout="@layout/hsv_severity"
-            android:layout_height="40dp"
             android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_below="@id/tv_severity"
             android:layout_marginTop="10dp" />
 
@@ -80,7 +58,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:text="Filter Attributes:" />
+            android:text="Filter Attributes:"
+            android:textColor="@color/foreground" />
 
         <TextView
             android:id="@+id/tv_severity"
@@ -90,7 +69,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="30dp"
-            android:text="Filter Severity:" />
+            android:text="Filter Severity:"
+            android:textColor="@color/foreground" />
 
     </RelativeLayout>
 

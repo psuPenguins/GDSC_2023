@@ -11,7 +11,7 @@
     tools:showIn="@layout/activity_new_report"
     android:layout_marginBottom="5dp">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/newMinorButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -22,9 +22,9 @@
         android:textColor="@color/foreground"
         app:cornerRadius="5dp"
         app:strokeColor="@color/green"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="1dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/newModerateButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -35,9 +35,9 @@
         android:textColor="@color/foreground"
         app:cornerRadius="5sp"
         app:strokeColor="@color/yellow"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="1dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/newSeriousButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -48,5 +48,5 @@
         android:textColor="@color/foreground"
         app:cornerRadius="5dp"
         app:strokeColor="@color/red"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="1dp" />
 </LinearLayout>

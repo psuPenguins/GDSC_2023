@@ -47,33 +47,16 @@
         tools:textColorHint="@color/foreground" />
 
 
-    <HorizontalScrollView
-        android:id="@+id/hsvDangerType"
-        android:layout_width="match_parent"
+    <include
+        layout="@layout/hsv_types"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/hsvSeverity"
-        android:layout_marginBottom="0dp"
-        tools:layout_marginBottom="10dp">
+        android:layout_above="@+id/hsv_severity"
+        android:layout_marginBottom="0dp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <include layout="@layout/type_icy_road" />
-
-            <include layout="@layout/type_uneven" />
-
-            <include layout="@layout/type_obstacle" />
-
-            <include layout="@layout/type_puddle" />
-
-            <include layout="@layout/type_others" />
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-    <include layout="@layout/hsv_severity" />
+    <include
+        android:id="@+id/hsv_severity"
+        layout="@layout/hsv_severity" />
 
     <TextView
         android:id="@+id/submitReportButton"
