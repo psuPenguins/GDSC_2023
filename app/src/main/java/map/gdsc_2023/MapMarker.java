@@ -1,15 +1,24 @@
 package map.gdsc_2023;
 
 
+import static com.google.api.ResourceProto.resource;
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
 
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,29 +38,26 @@ public class MapMarker {
     public MapMarker(){}
 
 
-    private static void getBitmap (Context context, String imageUrl, OnBitmapLoadedListener listener) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Bitmap bitmap = Glide.with(context)
-                            .asBitmap()
-                            .load(imageUrl)
-                            .submit()
-                            .get();
+    private static void loadBitmap (Context context, String imageUrl, GoogleMap map, GeoPoint location) {
+        Glide.with(context)
+                .asBitmap()
+                .load(imageUrl)
+                .fitCenter()
+                .into(new CustomTarget<Bitmap>(200,200){
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        map.addMarker(new MarkerOptions()
+                                .icon(BitmapDescriptorFactory.fromBitmap(resource))
+                                .position(new LatLng(location.getLatitude(), location.getLongitude())));
+                    }
 
-                    // Return the Bitmap on the background thread
-                    listener.onBitmapLoaded(bitmap);
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
     }
 
-    private interface OnBitmapLoadedListener {
-        void onBitmapLoaded(Bitmap bitmap);
-    }
 
     private void hazardLoadOnSucess (GoogleMap mMap, Context context, @NonNull Task<QuerySnapshot> task) {
         if (task.isSuccessful()) {
@@ -60,14 +66,7 @@ public class MapMarker {
                 GeoPoint geo = (GeoPoint) document.get("location");
                 LatLng pin = new LatLng(geo.getLatitude(), geo.getLongitude());
                 String link = (String) document.get("image");
-                getBitmap(context, link, new OnBitmapLoadedListener() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap) {
-                        mMap.addMarker(new MarkerOptions()
-                                .position(pin)
-                                .icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
-                    }
-                });
+                loadBitmap(context, link, mMap, geo);
             }
         } else {
             // death
