@@ -17,6 +17,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
+        android:alpha=".8"
         android:background="@drawable/back_arrow_icon"
         android:contentDescription="@string/bc_back" />
 
@@ -43,8 +44,8 @@
         android:hint="Insert Description...."
         android:textAlignment="center"
         android:textColor="@color/foreground"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
-        tools:textColorHint="@color/foreground" />
+        android:textColorHint="@color/foreground"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
 
     <include
