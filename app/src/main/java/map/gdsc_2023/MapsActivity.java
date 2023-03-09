@@ -66,7 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker mCurrLocationMarker;
     private ActivityMapsBinding binding;
     private FusedLocationProviderClient fusedLocationClient;
-    private Location mLastLocation;
+    public static Location mLastLocation;
     private LocationRequest mLocationRequest;
     private SearchView searchView;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;

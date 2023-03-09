@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,8 @@ import android.widget.LinearLayout;
 import java.util.HashMap;
 import java.util.Map;
 import android.widget.Button;
+
+import com.google.firebase.firestore.GeoPoint;
 
 
 public class NewReportFragment extends Fragment {
@@ -50,15 +53,15 @@ public class NewReportFragment extends Fragment {
         //TODO: others doesn't work now
         LinearLayout llothers = view.findViewById(R.id.llothers);
 
-        LinearLayout newMinorButton = view.findViewById(R.id.newMinorButton);
-        LinearLayout newModerateButton = view.findViewById(R.id.newModerateButton);
-        LinearLayout newSeriousButton = view.findViewById(R.id.newSeriousButton);
+        Button newMinorButton = view.findViewById(R.id.newMinorButton);
+        Button newModerateButton = view.findViewById(R.id.newModerateButton);
+        Button newSeriousButton = view.findViewById(R.id.newSeriousButton);
 
         // getting the variables
-        Location location = this.getArguments().getParcelable("lastLocation");
+//        Location location = this.getArguments().getParcelable("lastLocation");
 
         String description =etNewReport.getText().toString();
-        GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLatitude());
+        GeoPoint geoPoint = new GeoPoint(MapsActivity.mLastLocation.getLatitude(), MapsActivity.mLastLocation.getLatitude());
         Map<String, Object> tags = new HashMap<>();
         tags.put("icy road", false);
         tags.put("obstacles", false);
@@ -104,7 +107,7 @@ public class NewReportFragment extends Fragment {
             }
         });
 
-        newMinorButton.setOnClickListener(new View.OnClickListener() {
+        newModerateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 tags.put("minor", false);
@@ -113,7 +116,7 @@ public class NewReportFragment extends Fragment {
             }
         });
 
-        newMinorButton.setOnClickListener(new View.OnClickListener() {
+        newSeriousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 tags.put("minor", false);

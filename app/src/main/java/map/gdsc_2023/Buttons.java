@@ -52,9 +52,6 @@ public class Buttons {
                 persistentBottomSheet.setVisibility(View.GONE);
                 locationReportLayout.setVisibility(View.VISIBLE);
                 searchView.setVisibility(View.GONE);
-//                useCurLocBtn = findViewById(R.id.currentLocationButton);
-//                useSelectLocBtn = findViewById(R.id.selectLocationButton);
-//                cancelReportBtn = findViewbyId(R.id.cancelButton);
 
             }
         });
@@ -69,18 +66,9 @@ public class Buttons {
                 persistentBottomSheet.setVisibility(View.GONE);
                 locationReportLayout.setVisibility(View.GONE);
                 searchView.setVisibility(View.GONE);
-//               selectedLocation=??;
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                Bundle bundle = new Bundle();
-                String myMessage = "Stackoverflow is cool!";
-                bundle.putParcelable("lastLocation", mLastLocation);
-                NewReportFragment report = new NewReportFragment();
-                report.setArguments(bundle);
-                fragmentTransaction.replace(R.id.map, report);
+                fragmentTransaction.replace(R.id.map,new NewReportFragment());
                 fragmentTransaction.commit();
-//                fragmentTransaction.replace(R.id.map,new NewReportFragment());
-//                fragmentTransaction.commit();
             }
         });
     }
@@ -93,7 +81,6 @@ public class Buttons {
                 persistentBottomSheet.setVisibility(View.GONE);
                 locationReportLayout.setVisibility(View.GONE);
                 searchView.setVisibility(View.GONE);
-//               selectedLocation=??;
 
                 mMap.setOnMapClickListener(new OnMapClickListener(){
 
