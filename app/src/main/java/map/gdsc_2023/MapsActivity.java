@@ -2,9 +2,13 @@ package map.gdsc_2023;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -48,6 +52,10 @@ import map.gdsc_2023.databinding.ActivityMapsBinding;
 
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -130,6 +138,69 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         // at last we calling our map fragment to update.
         mapFragment.getMapAsync(this);
+
+
+        LinearLayout addReportBtn;
+        Button useCurLocBtn, useSelectLocBtn, cancelReportBtn;
+        addReportBtn = findViewById(R.id.btnAddReport);
+        useCurLocBtn = findViewById(R.id.currentLocationButton);
+        useSelectLocBtn = findViewById(R.id.selectLocationButton);
+        cancelReportBtn = findViewById(R.id.cancelButton);
+        CoordinatorLayout persistentBottomSheet = findViewById(R.id.persistentBottomSheet);
+        LinearLayout locationReportLayout = findViewById(R.id.locationReportLayout);
+
+        //choose to add report
+        addReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //make other layout visible, first one gone
+                persistentBottomSheet.setVisibility(View.GONE);
+                locationReportLayout.setVisibility(View.VISIBLE);
+//                useCurLocBtn = findViewById(R.id.currentLocationButton);
+//                useSelectLocBtn = findViewById(R.id.selectLocationButton);
+//                cancelReportBtn = findViewbyId(R.id.cancelButton);
+
+            }
+        });
+        //choose to use current location
+        useCurLocBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //make other layout visible, first one gone
+                persistentBottomSheet.setVisibility(View.GONE);
+                locationReportLayout.setVisibility(View.GONE);
+//               selectedLocation=??;
+               replaceFragment(new NewReportFragment());
+
+            }
+        });
+        //choose to select a location
+        useSelectLocBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                persistentBottomSheet.setVisibility(View.GONE);
+                locationReportLayout.setVisibility(View.GONE);
+//               selectedLocation=??;
+                replaceFragment(new NewReportFragment());
+
+
+            }
+        });
+
+        //cancel adding a report
+        cancelReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //make other layout visible, first one gone
+                locationReportLayout.setVisibility(View.GONE);
+                persistentBottomSheet.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+
 
     }
 
@@ -226,5 +297,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     };
+
+//Will need to import those classes
+//Do all activity screens need to be fragments?
+
+
+    private void replaceFragment(Fragment fragment) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.map,fragment);
+        fragmentTransaction.commit();
+
+    }
 
 }
