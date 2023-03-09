@@ -1,6 +1,7 @@
 package map.gdsc_2023;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -8,6 +9,8 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -36,6 +39,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +48,7 @@ import map.gdsc_2023.databinding.ActivityMapsBinding;
 
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -54,7 +59,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // for search view.
+    SearchView searchView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +78,59 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // fused location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // marking map
+
+        // adding on query listener for our search view.
+        // initializing our search view.
+        searchView = findViewById(R.id.idSearchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // on below line we are getting the
+                // location name from search view.
+                String location = searchView.getQuery().toString();
+
+                // below line is to create a list of address
+                // where we will store the list of all address.
+                List<Address> addressList = null;
+
+                // checking if the entered location is null or not.
+                if (location != null || location.equals("")) {
+                    // on below line we are creating and initializing a geo coder.
+                    Geocoder geocoder = new Geocoder(MapsActivity.this);
+                    try {
+                        // on below line we are getting location from the
+                        // location name and adding that location to address list.
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // on below line we are getting the location
+                    // from our list a first position.
+                    Address address = addressList.get(0);
+
+                    // on below line we are creating a variable for our location
+                    // where we will add our locations latitude and longitude.
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                    // on below line we are adding marker to that position.
+                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+
+                    // below line is to animate camera to that position.
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        // at last we calling our map fragment to update.
+        mapFragment.getMapAsync(this);
+
     }
 
     @Override
@@ -92,30 +154,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         /*
         LatLng pennState = new LatLng(40.7965, -77.8628);
         mMap.addMarker(new MarkerOptions().position(pennState).title("Marker in Penn State"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pennState,17));
         */
-        db.collection("Hazards")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // success stuff
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                GeoPoint geo = (GeoPoint) document.get("location");
-                                LatLng pin = new LatLng(geo.getLatitude(), geo.getLongitude());
-                                googleMap.addMarker(new MarkerOptions()
-                                        .position(pin)
-                                        .title("test marker"));
-                            }
-                        } else {
-                            // death
-                        }
-                    }
-                });
+
         mLocationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(500)
@@ -131,6 +176,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback,
                 Looper.myLooper());
         mMap.setMyLocationEnabled(true);
+
+        // marking map
+        MapMarker marker = new MapMarker();
+        marker.loadHazard(mMap, this);
     }
 
     /**
