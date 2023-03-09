@@ -131,6 +131,59 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // at last we calling our map fragment to update.
         mapFragment.getMapAsync(this);
 
+        /*
+        LinearLayout addReportBtn, useCurLocBtn, useSelectLocBtn, cancelReportBtn;
+        //choose to add report
+        addReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //make other layout visible, first one gone
+                persistentBottomSheet.setVisibility(View.GONE);
+                locationReportLayout.setVisibility(View.VISIBLE);
+                useCurLocBtn = findViewById(R.id.currentLocationButton);
+                useSelectLocBtn = findViewById(R.id.selectLocationButton);
+                cancelReportBtn = findViewbyId(R.id.cancelButton);
+
+            }
+        });
+        //choose to use current location
+        useCurLocBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               selectedLocation=??;
+               replaceFragment(new NewReportFragment());
+
+            }
+        });
+        //choose to select a location
+        useSelectLocBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               selectedLocation=??;
+               replaceFragment(new NewReportFragment());
+
+
+            }
+        });
+
+        //cancel adding a report
+        cancelReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //make other layout visible, first one gone
+                locationReportLayout.setVisibility(View.GONE);
+                persistentBottomSheet.setVisibility(View.VISIBLE);
+                addReportBtn= findViewById(R.id.btnAddReport);
+
+            }
+        });
+
+         */
+
     }
 
     @Override
@@ -226,5 +279,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     };
+/*
+Will need to import those classes
+Do all activity screens need to be fragments?
 
+
+    private void replaceFragment(Fragment fragment) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.mainFragment_view,fragment);
+        fragmentTransaction.commit();
+
+    }
+*/
 }
