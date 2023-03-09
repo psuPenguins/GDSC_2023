@@ -1,5 +1,6 @@
 package map.gdsc_2023;
 
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -58,7 +59,7 @@ public class Buttons {
         });
     }
 
-    public void useCurrentLocation (FragmentManager fragmentManager) {
+    public void useCurrentLocation (FragmentManager fragmentManager, Location mLastLocation) {
         //choose to use current location
         useCurLocBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +72,8 @@ public class Buttons {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.map,new NewReportFragment());
                 fragmentTransaction.commit();
+
+                FSHazard newReport = new FSHazard(); // TODO: Brian's job
             }
         });
     }

@@ -113,7 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 searchView);
 
         button.addReport();
-        button.useCurrentLocation(getSupportFragmentManager());
+        button.useCurrentLocation(getSupportFragmentManager(), mLastLocation);
         button.useSelectedLocation(getSupportFragmentManager(), mMap);
         button.cancelReport();
     }
