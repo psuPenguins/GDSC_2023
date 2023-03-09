@@ -60,7 +60,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Receiver{
 
     private GoogleMap mMap;
     private Marker mCurrLocationMarker;
@@ -70,6 +70,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     private SearchView searchView;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
+    private Buttons buttons;
 
 
     @Override
@@ -92,6 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this); // what is this?
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -103,8 +106,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapMarker marker = new MapMarker();
         marker.loadHazard(mMap, this);
 
-        // ved stuff
-        Buttons button = new Buttons(findViewById(R.id.btnAddReport),
+        // linking buttons for bottom sheet
+        this.buttons = new Buttons(
+                findViewById(R.id.btnAddReport),
                 findViewById(R.id.locationReportLayout),
                 findViewById(R.id.currentLocationButton),
                 findViewById(R.id.selectLocationButton),
@@ -112,10 +116,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 findViewById(R.id.persistentBottomSheet),
                 searchView);
 
-        button.addReport();
-        button.useCurrentLocation(getSupportFragmentManager(), mLastLocation);
-        button.useSelectedLocation(getSupportFragmentManager(), mMap);
-        button.cancelReport();
+        buttons.addReport();
+        buttons.useCurrentLocation(getSupportFragmentManager(), mLastLocation);
+        buttons.useSelectedLocation(getSupportFragmentManager(), mMap);
+        buttons.cancelReport();;
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -246,5 +250,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.map,fragment);
         fragmentTransaction.commit();
+    }
+
+    // Provides buttons to fragments
+    @Override
+    public Buttons getResult() {
+        return buttons;
     }
 }

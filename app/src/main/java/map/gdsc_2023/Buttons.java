@@ -115,4 +115,12 @@ public class Buttons {
             }
         });
     }
+
+
+    public void showAll() {
+        /** Shows all elements in map activity*/
+        locationReportLayout.setVisibility(View.VISIBLE);
+        persistentBottomSheet.setVisibility(View.VISIBLE);
+        searchView.setVisibility(View.VISIBLE);
+    }
 }
