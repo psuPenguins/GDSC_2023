@@ -1,6 +1,7 @@
 package map.gdsc_2023;
 
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -70,10 +71,16 @@ public class Buttons {
                 searchView.setVisibility(View.GONE);
 //               selectedLocation=??;
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.map,new NewReportFragment());
-                fragmentTransaction.commit();
 
-                FSHazard newReport = new FSHazard(); // TODO: Brian's job
+                Bundle bundle = new Bundle();
+                String myMessage = "Stackoverflow is cool!";
+                bundle.putParcelable("lastLocation", mLastLocation);
+                NewReportFragment report = new NewReportFragment();
+                report.setArguments(bundle);
+                fragmentTransaction.replace(R.id.map, report);
+                fragmentTransaction.commit();
+//                fragmentTransaction.replace(R.id.map,new NewReportFragment());
+//                fragmentTransaction.commit();
             }
         });
     }

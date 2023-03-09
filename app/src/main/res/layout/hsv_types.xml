@@ -13,11 +13,25 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <include layout="@layout/type_icy_road" />
-        <include layout="@layout/type_uneven" />
-        <include layout="@layout/type_obstacle" />
-        <include layout="@layout/type_puddle" />
-        <include layout="@layout/type_others" />
+        <include
+            android:id="@+id/llicyroad"
+            layout="@layout/type_icy_road" />
+
+        <include
+            android:id="@+id/llunevenroad"
+            layout="@layout/type_uneven" />
+
+        <include
+            android:id="@+id/llobstacles"
+            layout="@layout/type_obstacle" />
+
+        <include
+            android:id="@+id/llpuddles"
+            layout="@layout/type_puddle" />
+
+        <include
+            android:id="@+id/llothers"
+            layout="@layout/type_others" />
     </LinearLayout>
 
 </HorizontalScrollView>
