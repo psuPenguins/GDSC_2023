@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class AddReportFragment extends Fragment {
+public class ViewReportFragment extends Fragment {
     final String TAG = "VIEWREPORT";
     //private required variables
     @Override
