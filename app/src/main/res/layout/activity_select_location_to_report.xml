@@ -5,49 +5,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_gravity="bottom"
-        android:background="@color/background">
+        android:background="@color/background"
+        android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/currentLocationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="30dp"
-            android:contentDescription="Use Current Location"
-            android:minWidth="20dp"
-            android:text="Current Loc"
-            android:clickable="true"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/background"
+            android:clickable="true"
+            android:contentDescription="@string/bc_use_current_location"
+            android:focusable="true"
+            android:text="@string/bt_current_loc"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/foreground"
+            android:textSize="16sp"
+            app:cornerRadius="5dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/selectLocationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_toRightOf="@id/currentLocationButton"
-            android:layout_centerInParent="true"
-            android:layout_marginEnd="30dp"
-            android:contentDescription="Use Selected Location"
-            android:minWidth="20dp"
-            android:text="Select Loc"
-            android:clickable="true"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/background"
+            android:clickable="true"
+            android:contentDescription="@string/bc_use_selected_location"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/bt_select_loc"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/foreground"
+            android:textSize="16sp"
+            app:cornerRadius="5dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp" />
 
-        <Button
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_centerInParent="true"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:contentDescription="cencel report"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="0dp"
+            android:backgroundTint="@color/background"
+            android:clickable="true"
+            android:contentDescription="@string/bc_cancel_report"
+            android:focusable="true"
             android:minWidth="20dp"
             android:text="X"
-            android:clickable="true"/>
+            android:textAlignment="center"
+            android:textColor="@color/foreground"
+            android:textSize="18sp" />
 
 
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

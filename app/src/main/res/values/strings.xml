@@ -6,7 +6,13 @@
     // Button content descriptions
     <string name="bc_back">back arrow</string>
     <string name="bc_type_obstacle">obstacle</string>
+    <string name="bc_use_selected_location">Use Selected Location</string>
+    <string name="bc_use_current_location">Use Current Location</string>
+    <string name="bc_cancel_report">cancel report</string>
 
+    // Button texts
+    <string name="bt_select_loc">Select Location</string>
+    <string name="bt_current_loc">Current Location</string>
 
     // Report descriptions
     <string name="hole_description">There is a huge hole where your feet can fit and make you trip.</string>
