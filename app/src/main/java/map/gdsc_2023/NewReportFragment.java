@@ -48,14 +48,14 @@ public class NewReportFragment extends Fragment {
     final String TAG = "ADDREPORT";
     //private required variables
     private Button btnBack;
-    private Receiver receiver;
+    private ButtonsReceiver receiver;
     private Buttons mapButtons;
     private static final int pic_id = 123;
     private Uri photoUri;
     @Override
     public void onAttach(Context context){
         super.onAttach(getContext());
-        receiver = (Receiver) context;
+        receiver = (ButtonsReceiver) context;
     }
     private ImageView ivuploadImage;
 

@@ -1,13 +1,15 @@
 package map.gdsc_2023;
 
+<<<<<<< HEAD
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.ActivityResultRegistry;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+=======
+>>>>>>> a3b612ee298f865fb05aa09f0a508e55bb228bb9
 import androidx.appcompat.widget.SearchView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -26,7 +28,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -41,34 +42,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import map.gdsc_2023.databinding.ActivityMapsBinding;
 
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.Shape;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Receiver{
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ButtonsReceiver {
 
     private GoogleMap mMap;
     private Marker mCurrLocationMarker;
@@ -112,7 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // marking map
         MapMarker marker = new MapMarker();
-        marker.loadHazard(mMap, this);
+        marker.loadHazard(mMap, getSupportFragmentManager(),this);
 
         // linking buttons for bottom sheet
         this.buttons = new Buttons(
