@@ -41,6 +41,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 
 
@@ -180,11 +181,23 @@ public class NewReportFragment extends Fragment {
         submitReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // upload to firebase storage
-                String url = FBImageAdapter.uploadImageWithUriDownloadUrl(photoUri);
+                // upload image to firebase storage
+                FBImageAdapter.uploadImageWithUriDownloadUrl(photoUri, new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String downloadUrl) {
+                        if (downloadUrl != null) {
+                            // upload image to firestore
+                            Log.i("NewReportDownloadURL", downloadUrl);
+                            FSHazard newReport = new FSHazard(description, downloadUrl, geoPoint, tags, severity);
+                        } else {
+                            // Handle the case where there was an error
+                            Log.e("DownloadURL", "Error getting download URL");
+                        }
+                    }
+                });
 
                 // upload image to firestore
-                FSHazard newReport = new FSHazard(description, url, geoPoint, tags, severity);
+
 
                 // exit out
                 goMapsActivity();
