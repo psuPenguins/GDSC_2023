@@ -53,7 +53,7 @@ public class MapMarker{
         Glide.with(context)
                 .asBitmap()
                 .load(hazard.image)
-                .fitCenter()
+                .circleCrop()
                 .into(new CustomTarget<Bitmap>(200,200){
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {

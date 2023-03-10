@@ -20,6 +20,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -38,44 +40,66 @@ public class FBImageAdapter extends AppCompatActivity {
     private static String photoUrl = "";
 
 
+
     public FBImageAdapter() {}
 
-    public static String uploadImageWithUriDownloadUrl(Uri uri){
+    public static void uploadImageWithUriDownloadUrl(Uri uri, OnSuccessListener<String> successListener){
         Log.i("FBI", "send the uri:" + uri);
         int time = (int) (System.currentTimeMillis());
         Timestamp tsTemp = new Timestamp(time);
-        String ts =  tsTemp.toString();
+        String ts =  Long.toString(tsTemp.getTime());
         StorageReference uploadRef = storageRef.child(ts + ".jpg");
         UploadTask uploadTask = uploadRef.putFile(uri);
         photoUrl = ts + ".jpg";
+        Log.i("FilenameURL", photoUrl);
 
-        StorageReference downloadRef = storageRef.child(photoUrl);
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw Objects.requireNonNull(task.getException());
-                }
-
-                // Continue with the task to get the download URL
-                return uploadRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    Uri downloadUri = task.getResult();
-                } else {
-
-                }
-            }
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            // Get the download URL for the file
+            storageRef.child(photoUrl).getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                // Handle successful download URL retrieval
+                String downloadUrl = downloadUri.toString();
+                successListener.onSuccess(downloadUrl);
+            }).addOnFailureListener(e -> {
+                // Handle unsuccessful download URL retrieval
+                Log.e("DownloadURL", "Error getting download URL: " + e.getMessage());
+                successListener.onSuccess(null);
+            });
+        }).addOnFailureListener(e -> {
+            // Handle unsuccessful upload
+            Log.e("UploadImage", "Error uploading image: " + e.getMessage());
+            successListener.onSuccess(null);
         });
-        return "";
     }
 
-    public String getImageUrl(){
-        return "";
-    }
+//    public static void imageUpload(Uri uri){
+//        Log.i("DownloadURL", "Entering");
+//        uploadImageWithUriDownloadUrl(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                // Get the download URL for the file
+//                storageRef.child(photoUrl).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        // Handle successful download URL retrieval
+//                        String downloadUrl = uri.toString();
+//                        Log.i("DownloadURL", downloadUrl);
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle unsuccessful download URL retrieval
+//                        Log.e("DownloadURL", "Error getting download URL: " + exception.getMessage());
+//                    }
+//                });
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                // Handle unsuccessful upload
+//                Log.e("UploadImage", "Error uploading image: " + e.getMessage());
+//            }
+//        });
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

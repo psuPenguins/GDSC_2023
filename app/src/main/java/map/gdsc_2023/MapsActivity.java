@@ -1,11 +1,6 @@
 package map.gdsc_2023;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.ActivityResultRegistry;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,18 +8,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -40,6 +34,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,7 +45,7 @@ import java.util.List;
 import map.gdsc_2023.databinding.ActivityMapsBinding;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ButtonsReceiver {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, FragmentReceiver {
 
     private GoogleMap mMap;
     private Marker mCurrLocationMarker;
@@ -59,6 +57,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     private Buttons buttons;
+
+    final private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+//    db.collection("Hazards").whereEqualTo("", "").addSnapshotListener(new EventListener<QuerySnapshot>() {
+//        @Override
+//        public void onEvent(@Nullable QuerySnapshot value,
+//                @Nullable FirebaseFirestoreException e) {
+//            if (e != null) {
+//                Log.w("MapActivity", "Listen failed.", e);
+//            }
+//
+//        }
+//    });
+
 
 
     @Override
@@ -106,7 +118,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         buttons.addReport();
         buttons.useCurrentLocation(getSupportFragmentManager(), mLastLocation);
         buttons.useSelectedLocation(getSupportFragmentManager(), mMap);
-        buttons.cancelReport();;
+        buttons.cancelReport();
+        Context context = this;
+        db.collection("Hazards").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                MapMarker marker = new MapMarker();
+                marker.loadHazard(mMap, getSupportFragmentManager(),context);
+            }
+        });
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -188,6 +208,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             fusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if(mMap != null){ //prevent crashing if the map doesn't exist yet (eg. on starting activity)
+            mMap.clear();
+
+            // tracks current location
+            placeCurrentLocation(mMap);
+
+            // marking map
+            MapMarker marker = new MapMarker();
+            marker.loadHazard(mMap, getSupportFragmentManager(),this);
+
+            // linking buttons for bottom sheet
+            this.buttons = new Buttons(
+                    findViewById(R.id.btnAddReport),
+                    findViewById(R.id.locationReportLayout),
+                    findViewById(R.id.currentLocationButton),
+                    findViewById(R.id.selectLocationButton),
+                    findViewById(R.id.cancelButton),
+                    findViewById(R.id.persistentBottomSheet),
+                    searchView);
+
+            buttons.addReport();
+            buttons.useCurrentLocation(getSupportFragmentManager(), mLastLocation);
+            buttons.useSelectedLocation(getSupportFragmentManager(), mMap);
+            buttons.cancelReport();
+
+            // add markers from database to the map
+        }
+    }
 
     /**
      * Enables the My Location layer if the fine location permission has been granted.
@@ -241,7 +293,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // Provides buttons to fragments
     @Override
-    public Buttons getResult() {
+    public Buttons getButtons() {
         return buttons;
+    }
+    @Override
+    public GoogleMap getMap() {
+        return mMap;
+    }
+
+    @Override
+    public FragmentManager getFM() {
+        return getSupportFragmentManager();
     }
 }

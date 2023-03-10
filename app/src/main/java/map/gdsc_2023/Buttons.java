@@ -1,6 +1,7 @@
 package map.gdsc_2023;
 
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.parceler.Parcels;
 
 
 public class Buttons{
@@ -62,11 +65,20 @@ public class Buttons{
             @Override
             public void onClick(View v) {
                 //make other layout visible, first one gone
+
                 persistentBottomSheet.setVisibility(View.GONE);
                 locationReportLayout.setVisibility(View.GONE);
                 searchView.setVisibility(View.GONE);
+
+                // Bundle up a point
+                Bundle args = new Bundle();
+                args.putDouble("longitude", mLastLocation.getLongitude());
+                args.putDouble("latitude", mLastLocation.getLatitude());
+
+                NewReportFragment newReportFragment = new NewReportFragment();
+                newReportFragment.setArguments(args);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.map,new NewReportFragment());
+                fragmentTransaction.replace(R.id.map, newReportFragment);
                 fragmentTransaction.commit();
             }
         });
@@ -85,8 +97,16 @@ public class Buttons{
 
                     public void onMapClick(@NonNull LatLng point){
                         Log.i("Select Location LatLong", "The point is: " + point);
+
+                        // Bundle up a point
+                        Bundle args = new Bundle();
+                        args.putDouble("longitude", point.longitude);
+                        args.putDouble("latitude", point.latitude);
+
+                        NewReportFragment newReportFragment = new NewReportFragment();
+                        newReportFragment.setArguments(args);
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.map,new NewReportFragment());
+                        fragmentTransaction.replace(R.id.map, newReportFragment);
                         fragmentTransaction.commit();
                         // TODO: add the report where point is (for VED) :)
                     }
