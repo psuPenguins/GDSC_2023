@@ -2,6 +2,7 @@ package map.gdsc_2023;
 
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -23,10 +24,15 @@ import android.view.ViewGroup;
 
 
 public class ViewReportFragment extends Fragment {
-    final String TAG = "VIEWREPORT";
     //private required variables
+    final String TAG = "VIEWREPORT";
+    private ButtonsReceiver receiver;
+    private Buttons mapButtons;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
+        mapButtons = receiver.getResult();
+        mapButtons.hideAll();
         return inflater.inflate(R.layout.activity_existing_report, parent, false);
     }
 
@@ -36,6 +42,12 @@ public class ViewReportFragment extends Fragment {
 
         // link the private variables to the elements in the xml files
 
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(getContext());
+        receiver = (ButtonsReceiver) context;
     }
 
 }

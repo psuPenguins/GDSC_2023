@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -26,13 +25,13 @@ public class NewReportFragment extends Fragment {
     final String TAG = "ADDREPORT";
     //private required variables
     private Button btnBack;
-    private Receiver receiver;
+    private ButtonsReceiver receiver;
     private Buttons mapButtons;
 
     @Override
     public void onAttach(Context context){
         super.onAttach(getContext());
-        receiver = (Receiver) context;
+        receiver = (ButtonsReceiver) context;
     }
 
     @Override
