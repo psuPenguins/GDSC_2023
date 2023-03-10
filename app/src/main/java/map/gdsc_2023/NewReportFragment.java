@@ -55,6 +55,7 @@ public class NewReportFragment extends Fragment {
         Button newMinorButton = view.findViewById(R.id.newMinorButton);
         Button newModerateButton = view.findViewById(R.id.newModerateButton);
         Button newSeriousButton = view.findViewById(R.id.newSeriousButton);
+        Button uploadImageButton = view.findViewById(R.id.uploadImageButton);
 
         // getting the variables
 //        Location location = this.getArguments().getParcelable("lastLocation");
@@ -125,6 +126,14 @@ public class NewReportFragment extends Fragment {
         });
 
         // TODO: get the image
+        uploadImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FBImageAdapter kingBob = new FBImageAdapter();
+                kingBob.launchCamera(view.getContext());
+            }
+        });
+
         // link the private variables to the elements in the xml files
 //        FSHazard newReport = new FSHazard(description, image, geoPoint, tags, severity);
 //        MapsActivity.global_location = null;
