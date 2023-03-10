@@ -1,6 +1,8 @@
 package map.gdsc_2023;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.parceler.Parcels;
 
@@ -36,12 +40,12 @@ public class ViewReportFragment extends Fragment {
         mapButtons.hideAll();
         Bundle args = getArguments();
         description = args.getString("description");
-        image = args.getString("Image");
+        image = args.getString("image");
         Parcelable parcelSeverity = args.getParcelable("severity");
         Parcelable parcelTag = args.getParcelable("tags");
-
         severity = Parcels.unwrap(parcelSeverity);
         tag = Parcels.unwrap(parcelTag);
+
         return inflater.inflate(R.layout.activity_existing_report, parent, false);
     }
 
@@ -55,12 +59,40 @@ public class ViewReportFragment extends Fragment {
         Button btnBack = view.findViewById(R.id.backButton);
 
         tvReportDescription.setText(description);
+
+        //image
+        Glide.with(this.getContext())
+                .asBitmap()
+                .load(image)
+                .fitCenter()
+                .into(ivReportPic);
+
+        //back button
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view){
+                Log.i(TAG, "onClick back button");
+                goMapsActivity();
+            }
+        });
     }
 
     @Override
     public void onAttach(Context context){
         super.onAttach(getContext());
         receiver = (ButtonsReceiver) context;
+    }
+
+    private void goMapsActivity(){
+        Log.i(TAG, "Going into MapsFragment");
+        FragmentManager fm = getParentFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction().setReorderingAllowed(true);
+        Log.i(TAG, "Going into MapsFragment");
+
+        mapButtons.showMainFrames();
+
+        transaction.remove(this);
+        transaction.commit();
     }
 
 }
