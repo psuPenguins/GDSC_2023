@@ -1,14 +1,11 @@
 package map.gdsc_2023;
 
-<<<<<<< HEAD
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.ActivityResultRegistry;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-=======
->>>>>>> a3b612ee298f865fb05aa09f0a508e55bb228bb9
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
