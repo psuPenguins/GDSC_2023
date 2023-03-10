@@ -20,7 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 
-public class Buttons {
+public class Buttons{
     private final LinearLayout addReportBtn, locationReportLayout;
     private final Button useCurLocBtn, useSelectLocBtn, cancelReportBtn;
     private final CoordinatorLayout persistentBottomSheet;
@@ -125,4 +125,5 @@ public class Buttons {
         persistentBottomSheet.setVisibility(View.GONE);
         searchView.setVisibility(View.GONE);
     }
+
 }

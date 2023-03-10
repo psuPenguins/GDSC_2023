@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,11 +37,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import android.os.Parcel;
+
+import org.parceler.Parcels;
+
 import java.util.concurrent.ExecutionException;
 
 public class MapMarker{
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private HashMap<Integer,FSHazard> hazards = new HashMap<>();
+    private FSHazard clickedHazard;
 
 
 
@@ -66,9 +72,20 @@ public class MapMarker{
                                 FSHazard clickedHazard = hazards.get(marker.getTag());
                                 Log.i("Clicked ping on map.", "The point is: " + clickedHazard.location);
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.add(R.id.map, new ViewReportFragment());
+
+                                // Bundle up a hazard
+                                Bundle args = new Bundle();
+                                args.putString("description", clickedHazard.description);
+                                // args.putDouble("longitude", clickedHazard.location.getLongitude());
+                                // args.putDouble("latitude", clickedHazard.location.getLatitude());
+                                args.putParcelable("tags", Parcels.wrap(clickedHazard.tags));
+                                args.putParcelable("severity",Parcels.wrap(clickedHazard.severity));
+                                args.putString("image",clickedHazard.image);
+
+                                ViewReportFragment viewReportFragment = new ViewReportFragment();
+                                viewReportFragment.setArguments(args);
+                                fragmentTransaction.add(R.id.map, viewReportFragment);
                                 fragmentTransaction.commit();
-                                // TODO: add the report where point is (for VED) :)
                                 return false;
                             }
                         });
@@ -86,7 +103,7 @@ public class MapMarker{
         if (task.isSuccessful()) {
             // success stuff
             for (QueryDocumentSnapshot document : task.getResult()) {
-                FSHazard hazard = new FSHazard((String)document.get("description"), (String)document.get("image"), (GeoPoint)document.get("location"), (Map<String, Object>)document.get("tags"), (Map<String, Object>)document.get("severity"));
+                FSHazard hazard = new FSHazard((String)document.get("description"), (String)document.get("image"), (GeoPoint)document.get("location"), (HashMap<String, Object>)document.get("tags"), (HashMap<String, Object>)document.get("severity"));
                 loadBitmap(context, fragmentManager, mMap, hazard);
             }
         } else {
