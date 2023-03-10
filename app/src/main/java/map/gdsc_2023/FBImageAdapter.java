@@ -13,13 +13,26 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 
 public class FBImageAdapter extends AppCompatActivity {
@@ -27,21 +40,46 @@ public class FBImageAdapter extends AppCompatActivity {
     public static final int CAMERA_REQUEST_CODE = 42; // ??? What are you
     private Uri fileProvider;
 
+    private static String photoUrl = "";
+
+
     public FBImageAdapter() {}
 
-    public void launchCamera(Context context) {
-        // create Intent to take a picture and return control to the calling application
+    public static String uploadImageWithUriDownloadUrl(Uri uri){
+        Log.i("FBI", "send the uri:" + uri);
+        int time = (int) (System.currentTimeMillis());
+        Timestamp tsTemp = new Timestamp(time);
+        String ts =  tsTemp.toString();
+        StorageReference uploadRef = storageRef.child(ts + ".jpg");
+        UploadTask uploadTask = uploadRef.putFile(uri);
+        photoUrl = ts + ".jpg";
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        StorageReference downloadRef = storageRef.child(photoUrl);
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw Objects.requireNonNull(task.getException());
+                }
 
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        //fileProvider = FileProvider.getUriForFile(context, "com.codepath.fileprovider", photoFile);
-        //intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, CAMERA_REQUEST_CODE);
-        }
+                // Continue with the task to get the download URL
+                return uploadRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                } else {
+
+                }
+            }
+        });
+        return "";
+    }
+
+    public String getImageUrl(){
+        return "";
     }
 
     @Override
@@ -60,22 +98,6 @@ public class FBImageAdapter extends AppCompatActivity {
     }
 
 
-
-    // Returns the File for a photo stored on disk given the fileName
-    private File getPhotoFileUri(String fileName, Context context) {
-        // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "FBImageAdapter");
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-            Log.d("FBImageAdapter", "failed to create directory");
-        }
-
-        // Return the file target for the photo based on filename
-        return new File(mediaStorageDir.getPath() + File.separator + fileName);
-    }
 
 
 }

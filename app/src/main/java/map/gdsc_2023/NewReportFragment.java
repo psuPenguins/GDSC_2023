@@ -1,24 +1,46 @@
 package map.gdsc_2023;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.GeoPoint;
 
 
@@ -28,12 +50,15 @@ public class NewReportFragment extends Fragment {
     private Button btnBack;
     private Receiver receiver;
     private Buttons mapButtons;
-
+    private static final int pic_id = 123;
+    private Uri photoUri;
     @Override
     public void onAttach(Context context){
         super.onAttach(getContext());
         receiver = (Receiver) context;
     }
+    private ImageView ivuploadImage;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
@@ -56,7 +81,9 @@ public class NewReportFragment extends Fragment {
         Button newMinorButton = view.findViewById(R.id.newMinorButton);
         Button newModerateButton = view.findViewById(R.id.newModerateButton);
         Button newSeriousButton = view.findViewById(R.id.newSeriousButton);
-        Button uploadImageButton = view.findViewById(R.id.uploadImageButton);
+        ivuploadImage = view.findViewById(R.id.ivuploadImage);
+
+        TextView submitReportButton = view.findViewById(R.id.submitReportButton);
 
         // getting the variables
 //        Location location = this.getArguments().getParcelable("lastLocation");
@@ -127,22 +154,39 @@ public class NewReportFragment extends Fragment {
         });
 
         // TODO: get the image
-        uploadImageButton.setOnClickListener(new View.OnClickListener() {
+        ivuploadImage.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("VisibleForTests")
             @Override
             public void onClick(View view) {
-                FBImageAdapter kingBob = new FBImageAdapter();
-                kingBob.launchCamera(view.getContext());
+                Log.i("FBImage", "at least you're not fucked up");
+                // Create the camera_intent ACTION_IMAGE_CAPTURE it will open the camera for capture the image
+                Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Start the activity with camera_intent, and request pic id
+                startActivityForResult(camera_intent, pic_id);
             }
         });
 
         // link the private variables to the elements in the xml files
-//        FSHazard newReport = new FSHazard(description, image, geoPoint, tags, severity);
-//        MapsActivity.global_location = null;
+
         btnBack = view.findViewById(R.id.backButton);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
                 Log.i(TAG, "onClick back button");
+                goMapsActivity();
+            }
+        });
+
+        submitReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // upload to firebase storage
+                String url = FBImageAdapter.uploadImageWithUriDownloadUrl(photoUri);
+
+                // upload image to firestore
+                FSHazard newReport = new FSHazard(description, url, geoPoint, tags, severity);
+
+                // exit out
                 goMapsActivity();
             }
         });
@@ -160,5 +204,27 @@ public class NewReportFragment extends Fragment {
         transaction.remove(this);
         transaction.commit();
     }
+    // This method will help to retrieve the image
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Match the request 'pic id with requestCode
+        if (requestCode == pic_id) {
+            // BitMap is data structure of image file which store the image in memory
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            // Set the image in imageview for display
+            Glide.with(this.getContext())
+                    .asBitmap()
+                    .load(photo)
+                    .fitCenter()
+                    .into(ivuploadImage);
+            photoUri = getImageUri(getContext(), photo);
+        }
+    }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 }

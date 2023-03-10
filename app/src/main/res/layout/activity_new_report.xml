@@ -10,7 +10,6 @@
     android:clipToOutline="true"
     android:padding="0dp">
 
-
     <Button
         android:id="@+id/backButton"
         android:layout_width="35dp"
@@ -21,21 +20,23 @@
         android:background="@drawable/back_arrow_icon"
         android:contentDescription="@string/bc_back" />
 
-    <Button
-        android:id="@+id/uploadImageButton"
+    <ImageView
+        android:id="@+id/ivuploadImage"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_below="@id/backButton"
         android:layout_centerInParent="true"
         android:background="@drawable/upload_image_button_foreground"
-        android:contentDescription="10dp" />
+        android:contentDescription="10dp"
+        android:clickable="true"
+        android:focusable="true"/>
 
     <EditText
         android:id="@+id/etNewReport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/hsvDangerType"
-        android:layout_below="@id/uploadImageButton"
+        android:layout_below="@id/ivuploadImage"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="20dp"
@@ -69,6 +70,8 @@
         android:gravity="center_horizontal|center_vertical"
         android:text="SUBMIT"
         android:textColor="@color/foreground"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:clickable="true"
+        android:focusable="true"/>
 
 </RelativeLayout>
