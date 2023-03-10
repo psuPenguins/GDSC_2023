@@ -6,20 +6,26 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 
 import android.view.LayoutInflater;
@@ -30,6 +36,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import android.widget.Button;
@@ -161,8 +174,26 @@ public class NewReportFragment extends Fragment {
                 Log.i("FBImage", "at least you're not fucked up");
                 // Create the camera_intent ACTION_IMAGE_CAPTURE it will open the camera for capture the image
                 Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Start the activity with camera_intent, and request pic id
-                startActivityForResult(camera_intent, pic_id);
+                File photoFile = null;
+                try {
+                    // Create a temporary file to store the image
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Handle the exception
+                    ex.printStackTrace();
+                }
+
+                if (photoFile != null) {
+                    // Get the content URI using the FileProvider
+                    Uri photoURI = FileProvider.getUriForFile(view.getContext(), "com.example.myapp.fileprovider", photoFile);
+
+                    // Add the content URI to the intent
+                    camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                    // Start the camera activity
+                    startActivityForResult(camera_intent, pic_id);
+                }
+                //startActivityForResult(camera_intent, pic_id);
             }
         });
 
@@ -205,26 +236,64 @@ public class NewReportFragment extends Fragment {
         transaction.commit();
     }
     // This method will help to retrieve the image
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Match the request 'pic id with requestCode
         if (requestCode == pic_id) {
             // BitMap is data structure of image file which store the image in memory
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Uri photoUri = data.getData();
+
+            // Use the content resolver to open an input stream for the photo
+            InputStream inputStream = null;
+            try {
+                inputStream = getContext().getContentResolver().openInputStream(photoUri);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Use BitmapFactory to decode the input stream into a Bitmap
+            Bitmap photo = BitmapFactory.decodeStream(inputStream);
+
+            // Bitmap photo = (Bitmap) data.getExtras().get("data");
             // Set the image in imageview for display
-            Glide.with(this.getContext())
+            Glide.with(getContext())
                     .asBitmap()
                     .load(photo)
                     .fitCenter()
                     .into(ivuploadImage);
-            photoUri = getImageUri(getContext(), photo);
+
+            if(data.getData()==null){
+
+            }else{
+                photoUri = data.getData();
+            }
+
+            Log.i("Debugging", "URI: " + photoUri);
         }
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name with the current time in milliseconds
+        int time = (int) (System.currentTimeMillis());
+        String imageFileName = "IMG_" + time + "_";
+
+        // Get the directory for the app's private pictures directory
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        // Create a new temporary file with the image file name and ".jpg" extension
+
+        // Return the temporary file
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
+    }
+
+    /*
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+    */
+
 }
