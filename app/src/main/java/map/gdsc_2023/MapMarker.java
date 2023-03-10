@@ -36,12 +36,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
-import java.util.Map;
-import android.os.Parcel;
 
 import org.parceler.Parcels;
-
-import java.util.concurrent.ExecutionException;
 
 public class MapMarker{
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
