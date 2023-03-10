@@ -110,15 +110,21 @@ public class Buttons{
     }
 
 
-    public void showAll() {
+    public void showMainFrames() {
+        /** Shows all elements in map activity*/
+        locationReportLayout.setVisibility(View.GONE);
+        persistentBottomSheet.setVisibility(View.VISIBLE);
+        searchView.setVisibility(View.VISIBLE);
+    }
+    public void showLocationSelectionFrame() {
         /** Shows all elements in map activity*/
         locationReportLayout.setVisibility(View.VISIBLE);
-        persistentBottomSheet.setVisibility(View.VISIBLE);
+        persistentBottomSheet.setVisibility(View.GONE);
         searchView.setVisibility(View.VISIBLE);
     }
 
     public void hideAll() {
-        /** Shows all elements in map activity*/
+        /** Hide all elements in map activity*/
         locationReportLayout.setVisibility(View.GONE);
         persistentBottomSheet.setVisibility(View.GONE);
         searchView.setVisibility(View.GONE);

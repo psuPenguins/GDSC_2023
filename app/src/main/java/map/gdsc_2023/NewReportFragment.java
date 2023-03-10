@@ -199,7 +199,7 @@ public class NewReportFragment extends Fragment {
         Log.i(TAG, "Going into MapsFragment");
 
         // Show all of the views on maps
-        mapButtons.showAll();
+        mapButtons.showLocationSelectionFrame();
 
         transaction.remove(this);
         transaction.commit();
