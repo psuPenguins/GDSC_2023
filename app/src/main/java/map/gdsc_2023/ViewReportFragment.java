@@ -26,7 +26,7 @@ import java.util.Map;
 public class ViewReportFragment extends Fragment {
     //private required variables
     final String TAG = "VIEWREPORT";
-    private ButtonsReceiver receiver;
+    private FragmentReceiver receiver;
     private Buttons mapButtons;
     private FSHazard hazard;
     private String description;
@@ -36,7 +36,7 @@ public class ViewReportFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
-        mapButtons = receiver.getResult();
+        mapButtons = receiver.getButtons();
         mapButtons.hideAll();
         Bundle args = getArguments();
         description = args.getString("description");
@@ -80,7 +80,7 @@ public class ViewReportFragment extends Fragment {
     @Override
     public void onAttach(Context context){
         super.onAttach(getContext());
-        receiver = (ButtonsReceiver) context;
+        receiver = (FragmentReceiver) context;
     }
 
     private void goMapsActivity(){

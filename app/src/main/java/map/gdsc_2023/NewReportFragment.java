@@ -1,22 +1,14 @@
 package map.gdsc_2023;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,12 +28,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 
@@ -49,21 +39,30 @@ public class NewReportFragment extends Fragment {
     final String TAG = "ADDREPORT";
     //private required variables
     private Button btnBack;
-    private ButtonsReceiver receiver;
+    private FragmentReceiver receiver;
     private Buttons mapButtons;
     private static final int pic_id = 123;
     private Uri photoUri;
     @Override
     public void onAttach(Context context){
         super.onAttach(getContext());
-        receiver = (ButtonsReceiver) context;
+        receiver = (FragmentReceiver) context;
     }
     private ImageView ivuploadImage;
+    private String description;
+    private Double longitude;
+    private Double latitude;
+
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
-        mapButtons = receiver.getResult();
+        mapButtons = receiver.getButtons();
+        Bundle args = getArguments();
+        longitude = args.getDouble("longitude");
+        latitude = args.getDouble("latitude");
         return inflater.inflate(R.layout.activity_new_report, parent, false);
     }
 
@@ -89,8 +88,8 @@ public class NewReportFragment extends Fragment {
         // getting the variables
 //        Location location = this.getArguments().getParcelable("lastLocation");
 
-        String description =etNewReport.getText().toString();
-        GeoPoint geoPoint = new GeoPoint(MapsActivity.mLastLocation.getLatitude(), MapsActivity.mLastLocation.getLatitude());
+
+        GeoPoint geoPoint = new GeoPoint(latitude, longitude);
         Map<String, Object> tags = new HashMap<>();
         tags.put("icy road", false);
         tags.put("obstacles", false);
@@ -123,34 +122,34 @@ public class NewReportFragment extends Fragment {
         });
 
         Map<String, Object> severity = new HashMap<>();
-        tags.put("minor", false);
-        tags.put("moderate", false);
-        tags.put("serious", false);
+        severity.put("minor", false);
+        severity.put("moderate", false);
+        severity.put("serious", false);
 
         newMinorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tags.put("minor", true);
-                tags.put("moderate", false);
-                tags.put("serious", false);
+                severity.put("minor", true);
+                severity.put("moderate", false);
+                severity.put("serious", false);
             }
         });
 
         newModerateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tags.put("minor", false);
-                tags.put("moderate", true);
-                tags.put("serious", false);
+                severity.put("minor", false);
+                severity.put("moderate", true);
+                severity.put("serious", false);
             }
         });
 
         newSeriousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tags.put("minor", false);
-                tags.put("moderate", false);
-                tags.put("serious", true);
+                severity.put("minor", false);
+                severity.put("moderate", false);
+                severity.put("serious", true);
             }
         });
 
@@ -188,11 +187,29 @@ public class NewReportFragment extends Fragment {
                         if (downloadUrl != null) {
                             // upload image to firestore
                             Log.i("NewReportDownloadURL", downloadUrl);
+                            description = etNewReport.getText().toString();
                             FSHazard newReport = new FSHazard(description, downloadUrl, geoPoint, tags, severity);
+                            Log.i("NEW", "description: " + description + "\n downloadurl: " + downloadUrl + "\n geoPoint: " + geoPoint + "\n tags: " + tags + "\n severity: " + severity);
+                            db.collection("Hazards")
+                                    .add(newReport)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error adding document", e);
+                                        }
+                                    });
                         } else {
                             // Handle the case where there was an error
                             Log.e("DownloadURL", "Error getting download URL");
                         }
+//                        MapMarker marker = new MapMarker();
+//                        marker.loadHazard(receiver.getMap(), receiver.getFM(),getContext());
                     }
                 });
 
@@ -211,11 +228,16 @@ public class NewReportFragment extends Fragment {
         FragmentTransaction transaction = fm.beginTransaction().setReorderingAllowed(true);
         Log.i(TAG, "Going into MapsFragment");
 
+
+
         // Show all of the views on maps
         mapButtons.showLocationSelectionFrame();
 
         transaction.remove(this);
         transaction.commit();
+
+        MapMarker marker = new MapMarker();
+        marker.loadHazard(receiver.getMap(), receiver.getFM(),getContext());
     }
     // This method will help to retrieve the image
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
