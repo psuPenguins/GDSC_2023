@@ -4,7 +4,7 @@ WalkWatch is an Android app designed to keep pedestrians safe while walking by p
 
 Built by four students from Pennsylvania State University during 2023, this project was built to compete in the 2023 Google Solution Challenge.
 
-Goals that meet:
+Goals that WalkWatch meets:
 - [X] Goal 3: Good Health and Wellbeing
 - Target 3.6: Reduce road injuries and deaths
   - Our app offers pedestrians a safer route-finding solution, ultimately decreasing the number of pedestrian accidents.
