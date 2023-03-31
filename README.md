@@ -1,7 +1,7 @@
 # WalkWatch
 Contributors: Nicholas Chan, Selina Fu, Chen-Kuan Liao, Ved Walavalkar
 
-DEMO video: [![Youtube Video Thumbnail](https://user-images.githubusercontent.com/69305166/226731256-41759d14-bf87-4b59-a6e6-3641b7ec36cf.gif)](https://www.youtube.com/watch?v=a4VPdeM_d2A&t=2s)
+To view the DEMO video, click on the GIF: [![Youtube Video Thumbnail](https://user-images.githubusercontent.com/69305166/226731256-41759d14-bf87-4b59-a6e6-3641b7ec36cf.gif)](https://www.youtube.com/watch?v=a4VPdeM_d2A&t=2s)
 
 
 WalkWatch is an Android app designed to keep pedestrians safe while walking by providing a routing feature that can identify and alert users of potential hazards. The app uses Android Studio, Java, Firebase Firestore, Firebase Storage, Google Clouds, and Maps SDK for Android. Current features include marking hazards, filtering marks, and displaying markers as pins on the map. Future features include creating routes that display hazards, using machine learning to find the safest route for handicap people, and implementing auto warnings. 
